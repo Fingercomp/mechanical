@@ -31,7 +31,12 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
         super(Material.IRON);
         setUnlocalizedName(Mechanical.NAME + "." + BlockBeltConveyor.NAME);
         setRegistryName(BlockBeltConveyor.NAME);
-        setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+        setDefaultState(
+                this.blockState.getBaseState()
+                        .withProperty(FACING, EnumFacing.NORTH)
+                        .withProperty(FRONT, false)
+                        .withProperty(BACK, false));
+
         GameRegistry.register(this);
         GameRegistry.register(new ItemBlock(this), getRegistryName());
     }
@@ -65,15 +70,30 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
     }
 
     @Override
-    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-
-    }
-
-    @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
                                     EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         worldIn.setBlockState(pos, state.withProperty(FRONT, false), 2);
         return true;
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState ownState, IBlockAccess world, BlockPos ownPos) {
+        EnumFacing ownFacing = ownState.getValue(FACING);
+        IBlockState neighborState = world.getBlockState(ownPos.offset(ownFacing));
+        Block neighborBlock = neighborState.getBlock();
+
+        if (neighborBlock instanceof BlockBeltConveyor && neighborState.getValue(FACING) == ownFacing) {
+            ownState = ownState.withProperty(FRONT, true);
+        }
+
+        neighborState = world.getBlockState(ownPos.offset(ownFacing.getOpposite()));
+        neighborBlock = neighborState.getBlock();
+
+        if (neighborBlock instanceof BlockBeltConveyor && neighborState.getValue(FACING) == ownFacing) {
+            ownState = ownState.withProperty(BACK, true);
+        }
+
+        return ownState;
     }
 
     @Override
