@@ -1,0 +1,69 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "back=true,facing=east,front=true": {
+      "model": "mechanical:belt_conveyor_front_back",
+      "y": 90
+    },
+    "back=true,facing=north,front=true": {
+      "model": "mechanical:belt_conveyor_front_back",
+      "y": 0
+    },
+    "back=true,facing=west,front=true": {
+      "model": "mechanical:belt_conveyor_front_back",
+      "y": 270
+    },
+    "back=true,facing=south,front=true": {
+      "model": "mechanical:belt_conveyor_front_back",
+      "y": 180
+    },
+    "back=true,facing=east,front=false": {
+      "model": "mechanical:belt_conveyor_back",
+      "y": 90
+    },
+    "back=true,facing=north,front=false": {
+      "model": "mechanical:belt_conveyor_back",
+      "y": 0
+    },
+    "back=true,facing=west,front=false": {
+      "model": "mechanical:belt_conveyor_back",
+      "y": 270
+    },
+    "back=true,facing=south,front=false": {
+      "model": "mechanical:belt_conveyor_back",
+      "y": 180
+    },
+    "back=false,facing=east,front=true": {
+      "model": "mechanical:belt_conveyor_front",
+      "y": 90
+    },
+    "back=false,facing=north,front=true": {
+      "model": "mechanical:belt_conveyor_front",
+      "y": 0
+    },
+    "back=false,facing=west,front=true": {
+      "model": "mechanical:belt_conveyor_front",
+      "y": 270
+    },
+    "back=false,facing=south,front=true": {
+      "model": "mechanical:belt_conveyor_front",
+      "y": 180
+    },
+    "back=false,facing=east,front=false": {
+      "model": "mechanical:belt_conveyor",
+      "y": 90
+    },
+    "back=false,facing=north,front=false": {
+      "model": "mechanical:belt_conveyor",
+      "y": 0
+    },
+    "back=false,facing=west,front=false": {
+      "model": "mechanical:belt_conveyor",
+      "y": 270
+    },
+    "back=false,facing=south,front=false": {
+      "model": "mechanical:belt_conveyor",
+      "y": 180
+    }
+  }
+}
