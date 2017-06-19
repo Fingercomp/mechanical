@@ -76,23 +76,12 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
     }
 
     @Override
-    public IBlockState getActualState(IBlockState ownState, IBlockAccess world, BlockPos ownPos) {
-        EnumFacing ownFacing = ownState.getValue(FACING);
-        IBlockState neighborState = world.getBlockState(ownPos.offset(ownFacing));
-        Block neighborBlock = neighborState.getBlock();
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos ownPos) {
+        EnumFacing facing = state.getValue(FACING);
+        return state
+                .withProperty(FRONT, canConnectTo(state, world.getBlockState(ownPos.offset(facing))))
+                .withProperty(BACK, canConnectTo(state, world.getBlockState(ownPos.offset(facing.getOpposite()))));
 
-        if (neighborBlock instanceof BlockBeltConveyor && neighborState.getValue(FACING) == ownFacing) {
-            ownState = ownState.withProperty(FRONT, true);
-        }
-
-        neighborState = world.getBlockState(ownPos.offset(ownFacing.getOpposite()));
-        neighborBlock = neighborState.getBlock();
-
-        if (neighborBlock instanceof BlockBeltConveyor && neighborState.getValue(FACING) == ownFacing) {
-            ownState = ownState.withProperty(BACK, true);
-        }
-
-        return ownState;
     }
 
     @Override
@@ -112,5 +101,16 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
 
     public int getMetaFromState(IBlockState state) {
         return state.getValue(FACING).getIndex();
+    }
+
+    private boolean canConnectTo(IBlockState ownState, IBlockState neighborState) {
+        Block neighborBlock = neighborState.getBlock();
+        if (!(neighborBlock instanceof BlockBeltConveyor))
+            return false;
+
+        EnumFacing ownFacing = ownState.getValue(FACING);
+        EnumFacing neighborFacing = neighborState.getValue(FACING);
+
+        return !ownFacing.equals(neighborFacing.getOpposite());
     }
 }
