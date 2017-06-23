@@ -86,7 +86,7 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return new AxisAlignedBB(0,0,0,1,.6,1);
+        return new AxisAlignedBB(0,0,0,1,.5,1);
     }
 
     public IBlockState getStateFromMeta(int meta) {

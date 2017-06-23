@@ -1,6 +1,7 @@
 package leshainc.mechanical;
 
 import leshainc.mechanical.common.CommonProxy;
+import net.minecraft.item.ItemFood;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
