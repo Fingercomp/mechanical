@@ -26,6 +26,7 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
     private static final PropertyDirection FACING = BlockHorizontal.FACING;
     private static final PropertyBool FRONT = PropertyBool.create("front");
     private static final PropertyBool BACK = PropertyBool.create("back");
+    private static final PropertyBool LEFT = PropertyBool.create("left");
 
     BlockBeltConveyor() {
         super(Material.IRON);
@@ -35,7 +36,8 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
                 this.blockState.getBaseState()
                         .withProperty(FACING, EnumFacing.NORTH)
                         .withProperty(FRONT, false)
-                        .withProperty(BACK, false));
+                        .withProperty(BACK, false)
+                        .withProperty(LEFT, false));
 
         GameRegistry.register(this);
         GameRegistry.register(new ItemBlock(this), getRegistryName());
@@ -43,7 +45,7 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
 
     @Override
     public BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING, FRONT, BACK);
+        return new BlockStateContainer(this, FACING, FRONT, BACK, LEFT);
     }
 
 //    @Nullable
@@ -80,7 +82,8 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
         EnumFacing facing = state.getValue(FACING);
         return state
                 .withProperty(FRONT, canConnectTo(state, world.getBlockState(ownPos.offset(facing))))
-                .withProperty(BACK, canConnectTo(state, world.getBlockState(ownPos.offset(facing.getOpposite()))));
+                .withProperty(BACK, canConnectTo(state, world.getBlockState(ownPos.offset(facing.getOpposite()))))
+                .withProperty(LEFT, canConnectTo(state, world.getBlockState(ownPos.offset(facing.rotateYCCW()))));
 
     }
 
@@ -108,9 +111,10 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
         if (!(neighborBlock instanceof BlockBeltConveyor))
             return false;
 
-        EnumFacing ownFacing = ownState.getValue(FACING);
-        EnumFacing neighborFacing = neighborState.getValue(FACING);
-
-        return !ownFacing.equals(neighborFacing.getOpposite());
+//        EnumFacing ownFacing = ownState.getValue(FACING);
+//        EnumFacing neighborFacing = neighborState.getValue(FACING);
+//
+//        return !ownFacing.equals(neighborFacing.getOpposite());
+        return true;
     }
 }
