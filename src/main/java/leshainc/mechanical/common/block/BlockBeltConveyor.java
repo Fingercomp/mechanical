@@ -27,6 +27,7 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
     private static final PropertyBool FRONT = PropertyBool.create("front");
     private static final PropertyBool BACK = PropertyBool.create("back");
     private static final PropertyBool LEFT = PropertyBool.create("left");
+    private static final PropertyBool RIGHT = PropertyBool.create("right");
 
     BlockBeltConveyor() {
         super(Material.IRON);
@@ -37,7 +38,8 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
                         .withProperty(FACING, EnumFacing.NORTH)
                         .withProperty(FRONT, false)
                         .withProperty(BACK, false)
-                        .withProperty(LEFT, false));
+                        .withProperty(LEFT, false)
+                        .withProperty(RIGHT, false));
 
         GameRegistry.register(this);
         GameRegistry.register(new ItemBlock(this), getRegistryName());
@@ -45,7 +47,7 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
 
     @Override
     public BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING, FRONT, BACK, LEFT);
+        return new BlockStateContainer(this, FACING, FRONT, BACK, LEFT, RIGHT);
     }
 
 //    @Nullable
@@ -83,7 +85,8 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
         return state
                 .withProperty(FRONT, canConnectTo(state, world.getBlockState(ownPos.offset(facing))))
                 .withProperty(BACK, canConnectTo(state, world.getBlockState(ownPos.offset(facing.getOpposite()))))
-                .withProperty(LEFT, canConnectTo(state, world.getBlockState(ownPos.offset(facing.rotateYCCW()))));
+                .withProperty(LEFT, canConnectTo(state, world.getBlockState(ownPos.offset(facing.rotateYCCW()))))
+                .withProperty(RIGHT, canConnectTo(state, world.getBlockState(ownPos.offset(facing.rotateY()))));
 
     }
 

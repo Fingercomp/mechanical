@@ -3,7 +3,8 @@
     "0": "mechanical:blocks/belt_conveyor_belt",
     "1": "mechanical:blocks/belt_conveyor_side",
     "2": "mechanical:blocks/belt_conveyor_steel",
-    "3": "mechanical:blocks/belt_conveyor_feet"
+    "3": "mechanical:blocks/belt_conveyor_feet",
+    "particle": "mechanical:blocks/belt_conveyor_steel"
   },
   "elements": [
     {
