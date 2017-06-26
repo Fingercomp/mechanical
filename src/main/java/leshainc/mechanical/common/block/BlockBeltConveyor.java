@@ -1,6 +1,7 @@
 package leshainc.mechanical.common.block;
 
 import leshainc.mechanical.Mechanical;
+import leshainc.mechanical.util.EnumLocalFacing;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -89,12 +90,17 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos ownPos) {
         EnumFacing facing = state.getValue(FACING);
-        return state
-                .withProperty(FRONT, canConnectTo(state, world.getBlockState(ownPos.offset(facing))))
-                .withProperty(BACK, canConnectTo(state, world.getBlockState(ownPos.offset(facing.getOpposite()))))
-                .withProperty(LEFT, canConnectTo(state, world.getBlockState(ownPos.offset(facing.rotateYCCW()))))
-                .withProperty(RIGHT, canConnectTo(state, world.getBlockState(ownPos.offset(facing.rotateY()))));
 
+        boolean front = canConnectTo(state, world.getBlockState(ownPos.offset(facing)), EnumLocalFacing.FRONT);
+        boolean back = canConnectTo(state, world.getBlockState(ownPos.offset(facing.getOpposite())), EnumLocalFacing.BACK);
+        boolean left = canConnectTo(state, world.getBlockState(ownPos.offset(facing.rotateYCCW())), EnumLocalFacing.LEFT);
+        boolean right = canConnectTo(state, world.getBlockState(ownPos.offset(facing.rotateY())), EnumLocalFacing.RIGHT);
+
+        return state
+                .withProperty(FRONT, front)
+                .withProperty(BACK, back)
+                .withProperty(LEFT, left)
+                .withProperty(RIGHT, right);
     }
 
     @Override
@@ -116,15 +122,25 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
         return state.getValue(FACING).getIndex();
     }
 
-    private boolean canConnectTo(IBlockState ownState, IBlockState neighborState) {
+    private boolean canConnectTo(IBlockState ownState, IBlockState neighborState, EnumLocalFacing localFacing) {
         Block neighborBlock = neighborState.getBlock();
         if (!(neighborBlock instanceof BlockBeltConveyor))
             return false;
 
-//        EnumFacing ownFacing = ownState.getValue(FACING);
-//        EnumFacing neighborFacing = neighborState.getValue(FACING);
-//
-//        return !ownFacing.equals(neighborFacing.getOpposite());
-        return true;
+        EnumFacing ownFacing = ownState.getValue(FACING);
+        EnumFacing neighborFacing = neighborState.getValue(FACING);
+
+        switch (localFacing) {
+            case FRONT:
+                return !ownFacing.equals(neighborFacing.getOpposite());
+            case BACK:
+                return ownFacing.equals(neighborFacing);
+            case LEFT:
+                return ownFacing.equals(neighborFacing.rotateYCCW());
+            case RIGHT:
+                return ownFacing.equals(neighborFacing.rotateY());
+            default:
+                return false;
+        }
     }
 }
