@@ -34,7 +34,7 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
 
     BlockBeltConveyor() {
         super(Material.IRON);
-        setUnlocalizedName(Mechanical.NAME + "." + BlockBeltConveyor.NAME);
+        setUnlocalizedName(Mechanical.MODID + "." + BlockBeltConveyor.NAME);
         setRegistryName(BlockBeltConveyor.NAME);
         setDefaultState(
                 this.blockState.getBaseState()

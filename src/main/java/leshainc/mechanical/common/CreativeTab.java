@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 
 @SuppressWarnings("WeakerAccess")
 public final class CreativeTab {
-    public static CreativeTabs instance = new CreativeTabs(Mechanical.NAME) {
+    public static CreativeTabs instance = new CreativeTabs(Mechanical.MODID) {
         @Override
         public ItemStack getTabIconItem() {
             return new ItemStack(Items.DIAMOND);
