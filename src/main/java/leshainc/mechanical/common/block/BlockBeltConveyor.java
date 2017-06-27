@@ -4,6 +4,7 @@ import leshainc.mechanical.Mechanical;
 import leshainc.mechanical.common.tileentity.TileEntityBeltConveyor;
 import leshainc.mechanical.util.AABBHelper;
 import leshainc.mechanical.util.EnumLocalFacing;
+import leshainc.mechanical.util.ItemHandlerHelper;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -25,6 +26,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -74,6 +77,17 @@ public class BlockBeltConveyor extends Block implements ITileEntityProvider {
     }
 
     @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileEntityBeltConveyor te = (TileEntityBeltConveyor) worldIn.getTileEntity(pos);
+        assert(te != null);
+
+        IItemHandler itemHandler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, state.getValue(FACING));
+        ItemHandlerHelper.dropItemHandlerItems(worldIn, pos, itemHandler);
+
+        super.breakBlock(worldIn, pos, state);
+    }
+
+    @Override
     public BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, FACING, FRONT, BACK, LEFT, RIGHT);
     }
@@ -107,8 +121,32 @@ public class BlockBeltConveyor extends Block implements ITileEntityProvider {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        worldIn.setBlockState(pos, state.withProperty(FRONT, false), 2);
+                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+    {
+        if (worldIn.isRemote)
+            return true;
+
+        TileEntityBeltConveyor te = (TileEntityBeltConveyor) worldIn.getTileEntity(pos);
+        assert(te != null);  // TODO: Remove assert
+
+        IItemHandler itemHandler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, state.getValue(FACING));
+        assert(itemHandler != null);  // TODO: Remove assert
+
+        ItemStack heldItem = playerIn.getHeldItem(hand);
+
+        if (!heldItem.isEmpty()) {
+            playerIn.setHeldItem(hand, ItemHandlerHelper.insertItem(itemHandler, heldItem, false));
+        } else {
+            // TODO: Remove that
+            Mechanical.log.info("Belt conveyor items: ");
+            for (int slot = 0; slot < itemHandler.getSlots(); slot++) {
+                ItemStack stack = itemHandler.getStackInSlot(slot);
+                if (!stack.isEmpty()) {
+                    Mechanical.log.info("  " + stack.toString());
+                }
+            }
+        }
+
         return true;
     }
 
