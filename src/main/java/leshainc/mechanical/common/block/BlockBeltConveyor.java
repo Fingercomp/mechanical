@@ -1,6 +1,7 @@
 package leshainc.mechanical.common.block;
 
 import leshainc.mechanical.Mechanical;
+import leshainc.mechanical.util.AABBHelper;
 import leshainc.mechanical.util.EnumLocalFacing;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -8,6 +9,7 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -22,6 +24,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 @SuppressWarnings("deprecation")
 public class BlockBeltConveyor extends Block /* implements ITileEntityProvider */ {
     public static String NAME = "belt_conveyor";
@@ -31,6 +36,24 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
     private static final PropertyBool BACK = PropertyBool.create("back");
     private static final PropertyBool LEFT = PropertyBool.create("left");
     private static final PropertyBool RIGHT = PropertyBool.create("right");
+
+    private static final AxisAlignedBB AABB_MIDDLE = new AxisAlignedBB(
+            0.171875, 0, 0.015625,
+            0.828125, 0.515625, 0.984375);
+
+    // TODO: get correct coordinates:
+    private static final AxisAlignedBB AABB_FRONT = new AxisAlignedBB(
+            0.171875, 0, 0.015625,
+            0.828125, 0.515625, 0.984375);
+    private static final AxisAlignedBB AABB_BACK = new AxisAlignedBB(
+            0.171875, 0, 0.015625,
+            0.828125, 0.515625, 0.984375);
+    private static final AxisAlignedBB AABB_LEFT = new AxisAlignedBB(
+            0.171875, 0, 0.015625,
+            0.828125, 0.515625, 0.984375);
+    private static final AxisAlignedBB AABB_RIGHT = new AxisAlignedBB(
+            0.171875, 0, 0.015625,
+            0.828125, 0.515625, 0.984375);
 
     BlockBeltConveyor() {
         super(Material.IRON);
@@ -105,7 +128,32 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return new AxisAlignedBB(0,0,0,1,.5,1);
+        return AABBHelper.rotateY(AABB_MIDDLE, state.getValue(FACING).getHorizontalIndex());
+    }
+
+    @Override
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox,
+                                      List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn,
+                                      boolean p_185477_7_ /* TODO: figure out what is this */)
+    {
+        int angle = state.getValue(FACING).getHorizontalIndex();
+        addCollisionBoxToList(pos, entityBox, collidingBoxes, AABBHelper.rotateY(AABB_MIDDLE, angle));
+
+        if (state.getValue(FRONT)) {
+            addCollisionBoxToList(pos, entityBox, collidingBoxes, AABBHelper.rotateY(AABB_FRONT, angle));
+        }
+
+        if (state.getValue(BACK)) {
+            addCollisionBoxToList(pos, entityBox, collidingBoxes, AABBHelper.rotateY(AABB_BACK, angle));
+        }
+
+        if (state.getValue(LEFT)) {
+            addCollisionBoxToList(pos, entityBox, collidingBoxes, AABBHelper.rotateY(AABB_LEFT, angle));
+        }
+
+        if (state.getValue(RIGHT)) {
+            addCollisionBoxToList(pos, entityBox, collidingBoxes, AABBHelper.rotateY(AABB_RIGHT, angle));
+        }
     }
 
     public IBlockState getStateFromMeta(int meta) {
