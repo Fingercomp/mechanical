@@ -1,6 +1,7 @@
 package leshainc.mechanical.common.block;
 
 import leshainc.mechanical.Mechanical;
+import leshainc.mechanical.common.tileentity.TileEntityBeltConveyor;
 import leshainc.mechanical.util.AABBHelper;
 import leshainc.mechanical.util.EnumLocalFacing;
 import net.minecraft.block.*;
@@ -14,6 +15,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -28,7 +30,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class BlockBeltConveyor extends Block /* implements ITileEntityProvider */ {
+public class BlockBeltConveyor extends Block implements ITileEntityProvider {
     public static String NAME = "belt_conveyor";
 
     private static final PropertyDirection FACING = BlockHorizontal.FACING;
@@ -76,11 +78,11 @@ public class BlockBeltConveyor extends Block /* implements ITileEntityProvider *
         return new BlockStateContainer(this, FACING, FRONT, BACK, LEFT, RIGHT);
     }
 
-//    @Nullable
-//    @Override
-//    public TileEntity createNewTileEntity(World worldIn, int meta) {
-//        return new TileEntityBeltConveyor();
-//    }
+    @Nullable
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new TileEntityBeltConveyor();
+    }
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {
