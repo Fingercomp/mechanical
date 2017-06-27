@@ -1,6 +1,7 @@
 package leshainc.mechanical.common.block;
 
 import leshainc.mechanical.Mechanical;
+import leshainc.mechanical.common.inventory.InventoryBeltConveyor;
 import leshainc.mechanical.common.tileentity.TileEntityBeltConveyor;
 import leshainc.mechanical.util.AABBHelper;
 import leshainc.mechanical.util.EnumLocalFacing;
@@ -26,8 +27,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -81,8 +80,8 @@ public class BlockBeltConveyor extends Block implements ITileEntityProvider {
         TileEntityBeltConveyor te = (TileEntityBeltConveyor) worldIn.getTileEntity(pos);
         assert(te != null);
 
-        IItemHandler itemHandler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, state.getValue(FACING));
-        ItemHandlerHelper.dropItemHandlerItems(worldIn, pos, itemHandler);
+        InventoryBeltConveyor inventory = te.inventory;
+        ItemHandlerHelper.dropItemHandlerItems(worldIn, pos, inventory);
 
         super.breakBlock(worldIn, pos, state);
     }
@@ -129,18 +128,17 @@ public class BlockBeltConveyor extends Block implements ITileEntityProvider {
         TileEntityBeltConveyor te = (TileEntityBeltConveyor) worldIn.getTileEntity(pos);
         assert(te != null);  // TODO: Remove assert
 
-        IItemHandler itemHandler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, state.getValue(FACING));
-        assert(itemHandler != null);  // TODO: Remove assert
+        InventoryBeltConveyor inventory = te.inventory;
 
         ItemStack heldItem = playerIn.getHeldItem(hand);
 
         if (!heldItem.isEmpty()) {
-            playerIn.setHeldItem(hand, ItemHandlerHelper.insertItem(itemHandler, heldItem, false));
+            playerIn.setHeldItem(hand, ItemHandlerHelper.insertItem(inventory, heldItem, false));
         } else {
             // TODO: Remove that
             Mechanical.log.info("Belt conveyor items: ");
-            for (int slot = 0; slot < itemHandler.getSlots(); slot++) {
-                ItemStack stack = itemHandler.getStackInSlot(slot);
+            for (int slot = 0; slot < inventory.getSlots(); slot++) {
+                ItemStack stack = inventory.getStackInSlot(slot);
                 if (!stack.isEmpty()) {
                     Mechanical.log.info("  " + stack.toString());
                 }
