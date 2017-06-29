@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 @SuppressWarnings("WeakerAccess")
 public class TileEntityBeltConveyor extends TileEntity {
     public static String NAME = "tile_entity_belt_conveyor";
-    public static int SIZE = 1;
+    public static int SIZE = 8;
     public static int UPDATE_RANGE = 64;
 
     public long lastChangeTime;

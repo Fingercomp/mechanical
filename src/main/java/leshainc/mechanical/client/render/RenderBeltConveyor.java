@@ -15,7 +15,14 @@ import javax.vecmath.Point3d;
 @SuppressWarnings("WeakerAccess")
 public class RenderBeltConveyor extends TileEntitySpecialRenderer {
     private static Point3d[] SLOT_POSITIONS = new Point3d[] {
-            new Point3d(0.0, 0.0, 0.0)
+            new Point3d(-0.7, 0.0, 0.0),
+            new Point3d( 0.7, 0.0, 0.0),
+            new Point3d(-0.7, 0.0, 1.0),
+            new Point3d( 0.7, 0.0, 1.0),
+            new Point3d(-0.7, 0.0, 2.0),
+            new Point3d( 0.7, 0.0, 2.0),
+            new Point3d(-0.7, 0.0, 3.0),
+            new Point3d( 0.7, 0.0, 3.0),
     };
 
     private RenderItem renderItem;
@@ -32,8 +39,8 @@ public class RenderBeltConveyor extends TileEntitySpecialRenderer {
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
 
-        GlStateManager.translate(0.5, 0.5, 0.5);
-        GlStateManager.scale(0.45, 0.45, 0.45);
+        GlStateManager.translate(0.5, 0.65, 0.125);
+        GlStateManager.scale(0.25, 0.25, 0.25);
 
         for (int slot = 0; slot < inventory.getSlots(); slot++) {
             ItemStack stack = inventory.getStackInSlot(slot);
@@ -54,7 +61,7 @@ public class RenderBeltConveyor extends TileEntitySpecialRenderer {
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
 
-        renderItem.renderItem(stack, ItemCameraTransforms.TransformType.GROUND);
+        renderItem.renderItem(stack, ItemCameraTransforms.TransformType.FIXED);
 
         GlStateManager.popMatrix();
         GlStateManager.disableRescaleNormal();
