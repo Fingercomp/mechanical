@@ -1,7 +1,9 @@
 package leshainc.mechanical.client.render;
 
+import leshainc.mechanical.common.block.BlockBeltConveyor;
 import leshainc.mechanical.common.inventory.InventoryBeltConveyor;
 import leshainc.mechanical.common.tileentity.TileEntityBeltConveyor;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
@@ -9,6 +11,7 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 import javax.vecmath.Point3d;
 
@@ -38,6 +41,14 @@ public class RenderBeltConveyor extends TileEntitySpecialRenderer {
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
+
+        GlStateManager.translate(0.5, 0.5, 0.5);
+
+        BlockPos pos = te.getPos();
+        IBlockState state = te.getWorld().getBlockState(pos);
+        GlStateManager.rotate(state.getValue(BlockBeltConveyor.FACING).getHorizontalAngle(), 0, 1, 0);
+
+        GlStateManager.translate(-0.5, -0.5, -0.5);
 
         GlStateManager.translate(0.5, 0.65, 0.125);
         GlStateManager.scale(0.25, 0.25, 0.25);

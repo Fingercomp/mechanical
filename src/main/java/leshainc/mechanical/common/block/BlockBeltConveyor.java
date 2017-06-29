@@ -30,15 +30,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation","WeakerAccess"})
 public class BlockBeltConveyor extends Block implements ITileEntityProvider {
     public static String NAME = "belt_conveyor";
 
-    private static final PropertyDirection FACING = BlockHorizontal.FACING;
-    private static final PropertyBool FRONT = PropertyBool.create("front");
-    private static final PropertyBool BACK = PropertyBool.create("back");
-    private static final PropertyBool LEFT = PropertyBool.create("left");
-    private static final PropertyBool RIGHT = PropertyBool.create("right");
+    public static final PropertyDirection FACING = BlockHorizontal.FACING;
+    public static final PropertyBool FRONT = PropertyBool.create("front");
+    public static final PropertyBool BACK = PropertyBool.create("back");
+    public static final PropertyBool LEFT = PropertyBool.create("left");
+    public static final PropertyBool RIGHT = PropertyBool.create("right");
 
     private static final AxisAlignedBB AABB_MIDDLE = new AxisAlignedBB(
             0.171875, 0, 0.015625,
