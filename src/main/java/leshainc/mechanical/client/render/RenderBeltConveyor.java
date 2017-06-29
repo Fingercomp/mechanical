@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -18,14 +19,14 @@ import javax.vecmath.Point3d;
 @SuppressWarnings("WeakerAccess")
 public class RenderBeltConveyor extends TileEntitySpecialRenderer {
     private static Point3d[] SLOT_POSITIONS = new Point3d[] {
-            new Point3d(-0.7, 0.0, 0.0),
-            new Point3d( 0.7, 0.0, 0.0),
-            new Point3d(-0.7, 0.0, 1.0),
-            new Point3d( 0.7, 0.0, 1.0),
-            new Point3d(-0.7, 0.0, 2.0),
-            new Point3d( 0.7, 0.0, 2.0),
-            new Point3d(-0.7, 0.0, 3.0),
-            new Point3d( 0.7, 0.0, 3.0),
+            new Point3d(-0.6, 0.0, 0.0),
+            new Point3d( 0.6, 0.0, 0.0),
+            new Point3d(-0.6, 0.0, 1.0),
+            new Point3d( 0.6, 0.0, 1.0),
+            new Point3d(-0.6, 0.0, 2.0),
+            new Point3d( 0.6, 0.0, 2.0),
+            new Point3d(-0.6, 0.0, 3.0),
+            new Point3d( 0.6, 0.0, 3.0),
     };
 
     private RenderItem renderItem;
@@ -46,11 +47,11 @@ public class RenderBeltConveyor extends TileEntitySpecialRenderer {
 
         BlockPos pos = te.getPos();
         IBlockState state = te.getWorld().getBlockState(pos);
-        GlStateManager.rotate(state.getValue(BlockBeltConveyor.FACING).getHorizontalAngle(), 0, 1, 0);
+        GlStateManager.rotate(360 - state.getValue(BlockBeltConveyor.FACING).getHorizontalAngle(), 0, 1, 0);
 
         GlStateManager.translate(-0.5, -0.5, -0.5);
 
-        GlStateManager.translate(0.5, 0.65, 0.125);
+        GlStateManager.translate(0.5, 0.55, 0.125);
         GlStateManager.scale(0.25, 0.25, 0.25);
 
         for (int slot = 0; slot < inventory.getSlots(); slot++) {
@@ -71,6 +72,11 @@ public class RenderBeltConveyor extends TileEntitySpecialRenderer {
         GlStateManager.enableRescaleNormal();
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
+
+        if (!(stack.getItem() instanceof ItemBlock)) {
+            GlStateManager.translate(0, -0.15, 0);
+            GlStateManager.rotate(90, 1, 0, 0);
+        }
 
         renderItem.renderItem(stack, ItemCameraTransforms.TransformType.FIXED);
 
