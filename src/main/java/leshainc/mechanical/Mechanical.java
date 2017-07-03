@@ -21,7 +21,7 @@ public class Mechanical {
     public static final String MODID = "mechanical";
     public static final String VERSION = "0.1";
 
-    public static Logger log;
+    public static Logger log;  // TODO: Move logger to a separate class
     public static SimpleNetworkWrapper network;
 
 
